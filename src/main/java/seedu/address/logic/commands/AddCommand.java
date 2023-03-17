@@ -8,7 +8,6 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import seedu.address.logic.commands.exceptions.CommandException;
-import seedu.address.model.Model;
 import seedu.address.model.OfficeConnectModel;
 import seedu.address.model.person.Person;
 
@@ -48,14 +47,14 @@ public class AddCommand extends Command {
     }
 
     @Override
-    public CommandResult execute(Model model, OfficeConnectModel officeConnectModel) throws CommandException {
-        requireNonNull(model);
+    public CommandResult execute(OfficeConnectModel officeConnectModel) throws CommandException {
+        requireNonNull(officeConnectModel);
 
-        if (model.hasPerson(toAdd)) {
+        if (officeConnectModel.getPersonRepositoryModelManager().hasItem(toAdd)) {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);
         }
 
-        model.addPerson(toAdd);
+        officeConnectModel.getPersonRepositoryModelManager().addItem(toAdd);
         return new CommandResult(String.format(MESSAGE_SUCCESS, toAdd));
     }
 

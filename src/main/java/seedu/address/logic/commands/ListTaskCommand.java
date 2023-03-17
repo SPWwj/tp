@@ -3,7 +3,6 @@ package seedu.address.logic.commands;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 import static seedu.address.model.OfficeConnectModel.PREDICATE_SHOW_ALL_TASKS;
 
-import seedu.address.model.Model;
 import seedu.address.model.OfficeConnectModel;
 
 /**
@@ -15,8 +14,8 @@ public class ListTaskCommand extends Command {
     public static final String MESSAGE_SUCCESS = "Listed all tasks";
 
     @Override
-    public CommandResult execute(Model model, OfficeConnectModel officeConnectModel) {
-        requireAllNonNull(model, officeConnectModel);
+    public CommandResult execute(OfficeConnectModel officeConnectModel) {
+        requireAllNonNull(officeConnectModel);
         officeConnectModel.getTaskModelManager().updateFilteredItemList(PREDICATE_SHOW_ALL_TASKS);
         return new CommandResult(MESSAGE_SUCCESS);
     }

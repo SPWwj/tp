@@ -7,7 +7,6 @@ import java.util.List;
 import seedu.address.commons.core.Messages;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.exceptions.CommandException;
-import seedu.address.model.Model;
 import seedu.address.model.OfficeConnectModel;
 import seedu.address.model.RepositoryModelManager;
 import seedu.address.model.shared.Id;
@@ -35,8 +34,8 @@ public class UnmarkCommand extends Command {
     }
 
     @Override
-    public CommandResult execute(Model model, OfficeConnectModel officeConnectModel) throws CommandException {
-        requireAllNonNull(model, officeConnectModel);
+    public CommandResult execute(OfficeConnectModel officeConnectModel) throws CommandException {
+        requireAllNonNull(officeConnectModel);
 
         RepositoryModelManager<Task> taskManager = officeConnectModel.getTaskModelManager();
         List<Task> taskList = taskManager.getFilteredItemList();

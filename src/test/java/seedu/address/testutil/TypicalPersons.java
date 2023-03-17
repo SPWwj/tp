@@ -1,5 +1,6 @@
 package seedu.address.testutil;
 
+
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_AMY;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import seedu.address.model.AddressBook;
+import seedu.address.model.Repository;
 import seedu.address.model.person.Person;
 
 /**
@@ -74,10 +75,10 @@ public class TypicalPersons {
     /**
      * Returns an {@code AddressBook} with all the typical persons.
      */
-    public static AddressBook getTypicalAddressBook() {
-        AddressBook ab = new AddressBook();
+    public static Repository<Person> getTypicalAddressBook() {
+        Repository<Person> ab = new Repository<>();
         for (Person person : getTypicalPersons()) {
-            ab.addPerson(person);
+            ab.addItem(person);
         }
         return ab;
     }

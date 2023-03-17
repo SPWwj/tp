@@ -1,6 +1,7 @@
 package seedu.address.testutil;
 
-import seedu.address.model.AddressBook;
+import seedu.address.model.ReadOnlyRepository;
+import seedu.address.model.Repository;
 import seedu.address.model.person.Person;
 
 /**
@@ -10,25 +11,25 @@ import seedu.address.model.person.Person;
  */
 public class AddressBookBuilder {
 
-    private AddressBook addressBook;
+    private Repository<Person> addressBook;
 
     public AddressBookBuilder() {
-        addressBook = new AddressBook();
+        addressBook = new Repository<>();
     }
 
-    public AddressBookBuilder(AddressBook addressBook) {
-        this.addressBook = addressBook;
+    public AddressBookBuilder(ReadOnlyRepository<Person> addressBook) {
+        this.addressBook = Repository.of(addressBook);
     }
 
     /**
      * Adds a new {@code Person} to the {@code AddressBook} that we are building.
      */
     public AddressBookBuilder withPerson(Person person) {
-        addressBook.addPerson(person);
+        addressBook.addItem(person);
         return this;
     }
 
-    public AddressBook build() {
+    public Repository<Person> build() {
         return addressBook;
     }
 }

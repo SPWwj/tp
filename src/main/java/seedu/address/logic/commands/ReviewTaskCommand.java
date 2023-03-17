@@ -5,7 +5,6 @@ import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
-import seedu.address.model.Model;
 import seedu.address.model.OfficeConnectModel;
 import seedu.address.model.RepositoryModelManager;
 import seedu.address.model.mapping.AssignTask;
@@ -42,12 +41,12 @@ public class ReviewTaskCommand extends Command {
      * Executes ReviewTaskCommand
      */
     @Override
-    public CommandResult execute(Model model, OfficeConnectModel officeConnectModel) throws CommandException {
-        requireAllNonNull(model, officeConnectModel);
+    public CommandResult execute(OfficeConnectModel officeConnectModel) throws CommandException {
+        requireAllNonNull(officeConnectModel);
 
         ObservableList<Task> taskList = officeConnectModel.getTaskModelManager()
-                .getReadOnlyRepository().getData()
-                .filtered(predicate);
+            .getReadOnlyRepository().getData()
+            .filtered(predicate);
         if (taskList.size() != 1) {
             throw new CommandException(Messages.MESSAGE_INVALID_TASK);
         }
@@ -57,7 +56,7 @@ public class ReviewTaskCommand extends Command {
 
         ObservableList<AssignTask> assignedPersonList = getAssignedPersonList(officeConnectModel, tId);
 
-        displayAssignedTasksAndPersons(model, officeConnectModel, assignedPersonList, tId);
+        displayAssignedTasksAndPersons(officeConnectModel, assignedPersonList, tId);
 
         if (assignedPersonList.isEmpty()) {
             return new CommandResult(String.format(MESSAGE_NO_PERSON_ASSIGNED, title));
@@ -66,10 +65,11 @@ public class ReviewTaskCommand extends Command {
         }
     }
 
-    private static void displayAssignedTasksAndPersons(Model model, OfficeConnectModel officeConnectModel,
+    private static void displayAssignedTasksAndPersons(OfficeConnectModel officeConnectModel,
                                                        ObservableList<AssignTask> assignedPersonList, Id tId) {
         RepositoryModelManager<Task> taskModelManager = officeConnectModel.getTaskModelManager();
-        model.updateFilteredPersonList(person -> assignedPersonList.stream()
+        officeConnectModel.getPersonRepositoryModelManager()
+            .updateFilteredItemList(person -> assignedPersonList.stream()
                 .anyMatch(personTask -> personTask.getPersonId().equals(person.getId())));
         taskModelManager.updateFilteredItemList(task -> task.getId().equals(tId));
     }

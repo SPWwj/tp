@@ -21,10 +21,8 @@ import java.util.List;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.exceptions.CommandException;
-import seedu.address.model.AddressBook;
-import seedu.address.model.Model;
-import seedu.address.model.ModelManager;
 import seedu.address.model.OfficeConnectModel;
+import seedu.address.model.Repository;
 import seedu.address.model.RepositoryModelManager;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.Person;
@@ -102,10 +100,10 @@ public class CommandTestUtil {
      * - the returned {@link CommandResult} matches {@code expectedCommandResult} <br>
      * - the {@code actualModel} matches {@code expectedModel}
      */
-    public static void assertCommandSuccess(Command command, Model actualModel, CommandResult expectedCommandResult,
-            Model expectedModel) {
+    public static void assertCommandSuccess(Command command, OfficeConnectModel actualModel, CommandResult expectedCommandResult,
+                                            OfficeConnectModel expectedModel) {
         try {
-            CommandResult result = command.execute(actualModel, new OfficeConnectModel());
+            CommandResult result = command.execute(actualModel);
             assertEquals(expectedCommandResult, result);
             assertEquals(expectedModel, actualModel);
         } catch (CommandException ce) {
@@ -115,11 +113,11 @@ public class CommandTestUtil {
     }
 
     /**
-     * Convenience wrapper to {@link #assertCommandSuccess(Command, Model, CommandResult, Model)}
+     * Convenience wrapper to {@link #assertCommandSuccess(Command, OfficeConnectModel, CommandResult, OfficeConnectModel)}
      * that takes a string {@code expectedMessage}.
      */
-    public static void assertCommandSuccess(Command command, Model actualModel, String expectedMessage,
-            Model expectedModel) {
+    public static void assertCommandSuccess(Command command, OfficeConnectModel actualModel, String expectedMessage,
+                                            OfficeConnectModel expectedModel) {
         CommandResult expectedCommandResult = new CommandResult(expectedMessage);
         assertCommandSuccess(command, actualModel, expectedCommandResult, expectedModel);
     }
@@ -130,17 +128,17 @@ public class CommandTestUtil {
      * - the {@code actualModel} matches {@code expectedModel}
      * - the {@code actualOfficeConnectModel} matches {@code expectedOfficeConnectModel}
      */
-    public static void assertCommandSuccess(Command command, Model actualModel, CommandResult expectedCommandResult,
-                                            Model expectedModel, OfficeConnectModel actualOfficeConnectModel,
+    public static void assertCommandSuccess(Command command, OfficeConnectModel actualModel, CommandResult expectedCommandResult,
+                                            OfficeConnectModel expectedModel, OfficeConnectModel actualOfficeConnectModel,
                                             OfficeConnectModel expectedOfficeConnectModel) {
         try {
-            CommandResult result = command.execute(actualModel, actualOfficeConnectModel);
+            CommandResult result = command.execute(actualModel);
             assertEquals(expectedCommandResult, result);
             assertEquals(expectedModel, actualModel);
             RepositoryModelManager<Task> actualModelTaskModelManager =
-                    actualOfficeConnectModel.getTaskModelManager();
+                actualOfficeConnectModel.getTaskModelManager();
             RepositoryModelManager<Task> expectedModelTaskModelManager =
-                    expectedOfficeConnectModel.getTaskModelManager();
+                expectedOfficeConnectModel.getTaskModelManager();
             assertEquals(actualModelTaskModelManager, expectedModelTaskModelManager);
         } catch (CommandException ce) {
             throw new AssertionError("Execution of command should not fail.", ce);
@@ -148,16 +146,16 @@ public class CommandTestUtil {
     }
 
     /**
-     * Convenience wrapper to {@link #assertCommandSuccess(Command, Model, CommandResult,
-     *                                                      Model, OfficeConnectModel, OfficeConnectModel)}
+     * Convenience wrapper to {@link #assertCommandSuccess(Command, OfficeConnectModel, CommandResult,
+     * OfficeConnectModel, OfficeConnectModel, OfficeConnectModel)}
      * that takes a string {@code expectedMessage}.
      */
-    public static void assertCommandSuccess(Command command, Model actualModel, String expectedMessage,
-                                            Model expectedModel, OfficeConnectModel actualOfficeConnectModel,
+    public static void assertCommandSuccess(Command command, OfficeConnectModel actualModel, String expectedMessage,
+                                            OfficeConnectModel expectedModel, OfficeConnectModel actualOfficeConnectModel,
                                             OfficeConnectModel expectedOfficeConnectModel) {
         CommandResult expectedCommandResult = new CommandResult(expectedMessage);
         assertCommandSuccess(command, actualModel, expectedCommandResult, expectedModel,
-                actualOfficeConnectModel, expectedOfficeConnectModel);
+            actualOfficeConnectModel, expectedOfficeConnectModel);
     }
 
     /**
@@ -168,7 +166,7 @@ public class CommandTestUtil {
     public static void assertTaskCommandSuccess(Command command, OfficeConnectModel actualModel,
                                                 CommandResult expectedCommandResult, OfficeConnectModel expectedModel) {
         try {
-            CommandResult result = command.execute(new ModelManager(), actualModel);
+            CommandResult result = command.execute(actualModel);
             assertEquals(expectedCommandResult, result);
             RepositoryModelManager<Task> actualModelTaskModelManager = actualModel.getTaskModelManager();
             RepositoryModelManager<Task> expectedModelTaskModelManager = expectedModel.getTaskModelManager();
@@ -194,16 +192,18 @@ public class CommandTestUtil {
      * - the CommandException message matches {@code expectedMessage} <br>
      * - the address book, filtered person list and selected person in {@code actualModel} remain unchanged
      */
-    public static void assertCommandFailure(Command command, Model actualModel, String expectedMessage) {
+    public static void assertCommandFailure(Command command, OfficeConnectModel actualModel, String expectedMessage) {
         // we are unable to defensively copy the model for comparison later, so we can
         // only do so by copying its components.
-        AddressBook expectedAddressBook = new AddressBook(actualModel.getAddressBook());
-        List<Person> expectedFilteredList = new ArrayList<>(actualModel.getFilteredPersonList());
+        Repository<Person> expectedAddressBook = Repository.of(actualModel.getPersonRepositoryModelManager()
+            .getReadOnlyRepository());
+        List<Person> expectedFilteredList = new ArrayList<>(actualModel.getPersonRepositoryModelManager()
+            .getFilteredItemList());
 
         assertThrows(CommandException.class, expectedMessage, () ->
-                command.execute(actualModel, new OfficeConnectModel()));
-        assertEquals(expectedAddressBook, actualModel.getAddressBook());
-        assertEquals(expectedFilteredList, actualModel.getFilteredPersonList());
+            command.execute(actualModel));
+        assertEquals(expectedAddressBook, actualModel.getPersonRepositoryModelManager().getReadOnlyRepository());
+        assertEquals(expectedFilteredList, actualModel.getPersonRepositoryModelManager().getFilteredItemList());
     }
 
     /**
@@ -220,22 +220,26 @@ public class CommandTestUtil {
         RepositoryModelManager<Task> expectedRepositoryModelManager = actualModel.getTaskModelManager();
         List<Task> expectedFilteredList = new ArrayList<>(actualModel.getTaskModelManager().getFilteredItemList());
         assertThrows(CommandException.class, expectedMessage, () ->
-                command.execute(new ModelManager(), actualModel));
+            command.execute(actualModel));
         assertEquals(expectedRepositoryModelManager, actualModel.getTaskModelManager());
         assertEquals(expectedFilteredList, actualModel.getTaskModelManager().getFilteredItemList());
     }
+
     /**
      * Updates {@code model}'s filtered list to show only the person at the given {@code targetIndex} in the
      * {@code model}'s address book.
      */
-    public static void showPersonAtIndex(Model model, Index targetIndex) {
-        assertTrue(targetIndex.getZeroBased() < model.getFilteredPersonList().size());
+    public static void showPersonAtIndex(OfficeConnectModel model, Index targetIndex) {
+        assertTrue(targetIndex.getZeroBased() < model
+            .getPersonRepositoryModelManager().getFilteredItemList().size());
 
-        Person person = model.getFilteredPersonList().get(targetIndex.getZeroBased());
+        Person person = model.getPersonRepositoryModelManager().getFilteredItemList()
+            .get(targetIndex.getZeroBased());
         final String[] splitName = person.getName().fullName.split("\\s+");
-        model.updateFilteredPersonList(new NameContainsKeywordsPredicate(Collections.singletonList(splitName[0])));
+        model.getPersonRepositoryModelManager()
+            .updateFilteredItemList(new NameContainsKeywordsPredicate(Collections.singletonList(splitName[0])));
 
-        assertEquals(1, model.getFilteredPersonList().size());
+        assertEquals(1, model.getPersonRepositoryModelManager().getFilteredItemList().size());
     }
 
     /**

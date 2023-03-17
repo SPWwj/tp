@@ -6,7 +6,6 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TITLE;
 
 import seedu.address.logic.commands.exceptions.CommandException;
-import seedu.address.model.Model;
 import seedu.address.model.OfficeConnectModel;
 import seedu.address.model.RepositoryModelManager;
 import seedu.address.model.task.Task;
@@ -39,8 +38,8 @@ public class AddTaskCommand extends Command {
     }
 
     @Override
-    public CommandResult execute(Model model, OfficeConnectModel officeConnectModel) throws CommandException {
-        requireNonNull(model);
+    public CommandResult execute(OfficeConnectModel officeConnectModel) throws CommandException {
+        requireNonNull(officeConnectModel);
 
         RepositoryModelManager<Task> taskModelManager = officeConnectModel.getTaskModelManager();
         if (taskModelManager.hasItem(toAdd)) {

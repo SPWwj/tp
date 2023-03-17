@@ -1,9 +1,7 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.model.ModelManager.PREDICATE_SHOW_ALL_PERSONS;
 
-import seedu.address.model.Model;
 import seedu.address.model.OfficeConnectModel;
 
 /**
@@ -17,9 +15,9 @@ public class ListCommand extends Command {
 
 
     @Override
-    public CommandResult execute(Model model, OfficeConnectModel officeConnectModel) {
-        requireNonNull(model);
-        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+    public CommandResult execute(OfficeConnectModel officeConnectModel) {
+        requireNonNull(officeConnectModel);
+        officeConnectModel.getPersonRepositoryModelManager().showAllItems();
         return new CommandResult(MESSAGE_SUCCESS);
     }
 }

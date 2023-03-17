@@ -30,7 +30,7 @@ public class PersonListPanel extends UiPart<Region> {
         super(FXML);
         Logger logger = LogsCenter.getLogger(PersonListPanel.class);
         logger.info("Init PersonListPanel");
-        personListView.setItems(logic.getFilteredPersonList());
+        personListView.setItems(logic.getOfficeConnectModel().getPersonRepositoryModelManager().getFilteredItemList());
         personListView.setCellFactory(listView -> new PersonListViewCell(logic.getOfficeConnectModel()));
     }
 
