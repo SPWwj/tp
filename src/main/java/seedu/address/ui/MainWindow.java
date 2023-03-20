@@ -28,7 +28,8 @@ import seedu.address.logic.parser.exceptions.ParseException;
 public class MainWindow extends UiPart<Stage> {
 
     private static final String FXML = "MainWindow.fxml";
-
+    private static final String DARK_THEME = "/css/DarkTheme.css";
+    private static final String LIGHT_THEME = "/css/LightTheme.css";
     private final Logger logger = LogsCenter.getLogger(getClass());
 
     private final Stage primaryStage;
@@ -204,5 +205,23 @@ public class MainWindow extends UiPart<Stage> {
             resultDisplay.setFeedbackToUser(e.getMessage());
             throw e;
         }
+    }
+
+    /**
+     * Loads the light themed css.
+     */
+    @FXML
+    public void setLightTheme() {
+        primaryStage.getScene().getStylesheets().clear();
+        primaryStage.getScene().getStylesheets().add(LIGHT_THEME);
+    }
+
+    /**
+     * Loads the dark themed css.
+     */
+    @FXML
+    public void setDarkTheme() {
+        primaryStage.getScene().getStylesheets().clear();
+        primaryStage.getScene().getStylesheets().add(DARK_THEME);
     }
 }
