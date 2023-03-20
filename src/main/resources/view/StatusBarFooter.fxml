@@ -5,9 +5,9 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <GridPane styleClass="status-bar" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1">
-  <stylesheets>
-    <URL value="@../css/StatusBar.css" />
-  </stylesheets>
+<!--  <stylesheets>-->
+<!--    <URL value="@../css/StatusBar.css" />-->
+<!--  </stylesheets>-->
 
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10" />

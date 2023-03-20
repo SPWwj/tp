@@ -4,9 +4,9 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.StackPane?>
 <StackPane styleClass="stack-pane" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1">
-  <stylesheets>
-    <URL value="@../css/CommandBox.css" />
-  </stylesheets>
+<!--  <stylesheets>-->
+<!--    <URL value="@../css/CommandBox.css" />-->
+<!--  </stylesheets>-->
   <TextField fx:id="commandTextField" onAction="#handleCommandEntered" promptText="Enter command here..."/>
 </StackPane>
 
