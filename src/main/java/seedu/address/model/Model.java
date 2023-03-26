@@ -44,6 +44,9 @@ public interface Model {
      */
     void setAddressBookFilePath(Path addressBookFilePath);
 
+    //=========== AddressBook ================================================================================
+    boolean isValidFilterPersonListIndexRange(int index);
+
     /**
      * Replaces address book data with the data in {@code addressBook}.
      */
@@ -51,6 +54,8 @@ public interface Model {
 
     /** Returns the AddressBook */
     ReadOnlyAddressBook getAddressBook();
+
+    Person getFilterPerson(int index);
 
     /**
      * Returns true if a person with the same identity as {@code person} exists in the address book.
@@ -84,4 +89,9 @@ public interface Model {
      * @throws NullPointerException if {@code predicate} is null.
      */
     void updateFilteredPersonList(Predicate<Person> predicate);
+
+    /**
+     * Filters the ReadOnly peron list by the given {@code predicate}.
+     */
+    ObservableList<Person> filterReadOnlyPersonList(Predicate<Person> predicate);
 }

@@ -3,6 +3,7 @@ package seedu.address.model;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
+import java.util.List;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
@@ -48,8 +49,20 @@ public class RepositoryModelManager<T extends Relationship<T>> {
         this.repo.resetData(repo);
     }
 
+    public void setRepository(List<T> items) {
+        this.repo.setItems(items);
+    }
+
     public ReadOnlyRepository<T> getReadOnlyRepository() {
         return repo;
+    }
+
+    public List<T> filter(Predicate<T> predicate) {
+        return repo.getFilterData(predicate);
+    }
+
+    public List<T> filterReadOnlyList(Predicate<T> predicate) {
+        return repo.getData().filtered(predicate);
     }
 
 
@@ -90,7 +103,13 @@ public class RepositoryModelManager<T extends Relationship<T>> {
     }
 
     //=========== Filtered Person List Accessors =============================================================
+    public ObservableList<T> filterItemList(Predicate<T> predicate) {
+        return itemFilteredList.filtered(predicate);
+    }
 
+    public int getFilteredListSize() {
+        return itemFilteredList.size();
+    }
 
     public ObservableList<T> getFilteredItemList() {
         return itemFilteredList;
@@ -99,6 +118,9 @@ public class RepositoryModelManager<T extends Relationship<T>> {
     public FilteredList<T> getFilteredItemList(Predicate<T> predicate) {
         updateFilteredItemList(predicate);
         return itemFilteredList;
+    }
+    public T getFilterItem(int index) {
+        return itemFilteredList.get(index);
     }
 
     /**

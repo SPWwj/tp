@@ -1,13 +1,22 @@
 package seedu.address.logic.commands;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static seedu.address.logic.commands.CommandTestUtil.assertAssignTaskCommandSuccess;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.logic.commands.CommandTestUtil.showPersonAtIndex;
+import static seedu.address.model.util.TypicalPersons.ALICE;
+import static seedu.address.model.util.TypicalPersons.CARL;
+import static seedu.address.model.util.TypicalPersons.getTypicalAddressBook;
+import static seedu.address.model.util.TypicalTasks.CHECK_BALANCES;
+import static seedu.address.model.util.TypicalTasks.COMPLETE_SLIDES;
+import static seedu.address.model.util.TypicalTasks.SEND_EMAIL_TO_CLIENT;
+import static seedu.address.model.util.TypicalTasks.STOCK_PANTRY;
+import static seedu.address.model.util.TypicalTasks.getTypicalTaskRepository;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND;
-import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +24,11 @@ import seedu.address.commons.core.Messages;
 import seedu.address.commons.core.index.Index;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
+import seedu.address.model.OfficeConnectModel;
+import seedu.address.model.Repository;
+import seedu.address.model.RepositoryModelManager;
 import seedu.address.model.UserPrefs;
+import seedu.address.model.mapping.AssignTask;
 import seedu.address.model.person.Person;
 
 /**
@@ -24,7 +37,14 @@ import seedu.address.model.person.Person;
  */
 public class DeleteCommandTest {
 
-    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+    private final Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+    private final OfficeConnectModel officeConnectModel = new OfficeConnectModel(
+            new RepositoryModelManager<>(getTypicalTaskRepository()),
+            new RepositoryModelManager<>(getPersonTaskRepository()));
+
+    private final OfficeConnectModel expectedOfficeConnectModel = new OfficeConnectModel(
+            new RepositoryModelManager<>(getTypicalTaskRepository()),
+            new RepositoryModelManager<>(getPersonTaskRepository()));
 
     @Test
     public void execute_validIndexUnfilteredList_success() {
@@ -77,25 +97,40 @@ public class DeleteCommandTest {
     }
 
     @Test
+    public void execute_checkDeletionOfAssignments_success() {
+        Person personToDelete = model.getFilteredPersonList().get(INDEX_FIRST.getZeroBased());
+        AssignTask assignmentToDelete1 = new AssignTask(ALICE.getId(), SEND_EMAIL_TO_CLIENT.getId());
+        AssignTask assignmentToDelete2 = new AssignTask(ALICE.getId(), COMPLETE_SLIDES.getId());
+        AssignTask assignmentToDelete3 = new AssignTask(ALICE.getId(), CHECK_BALANCES.getId());
+
+        DeleteCommand deleteCommand = new DeleteCommand(INDEX_FIRST);
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS, personToDelete);
+
+        expectedOfficeConnectModel.deleteAssignTaskModelManagerItem(assignmentToDelete1);
+        expectedOfficeConnectModel.deleteAssignTaskModelManagerItem(assignmentToDelete2);
+        expectedOfficeConnectModel.deleteAssignTaskModelManagerItem(assignmentToDelete3);
+
+        assertAssignTaskCommandSuccess(deleteCommand, model, officeConnectModel,
+                expectedMessage, expectedOfficeConnectModel);
+    }
+
+    @Test
     public void equals() {
         DeleteCommand deleteFirstCommand = new DeleteCommand(INDEX_FIRST);
         DeleteCommand deleteSecondCommand = new DeleteCommand(INDEX_SECOND);
 
         // same object -> returns true
-        assertTrue(deleteFirstCommand.equals(deleteFirstCommand));
+        assertEquals(deleteFirstCommand, deleteFirstCommand);
 
         // same values -> returns true
         DeleteCommand deleteFirstCommandCopy = new DeleteCommand(INDEX_FIRST);
-        assertTrue(deleteFirstCommand.equals(deleteFirstCommandCopy));
-
-        // different types -> returns false
-        assertFalse(deleteFirstCommand.equals(1));
+        assertEquals(deleteFirstCommand, deleteFirstCommandCopy);
 
         // null -> returns false
-        assertFalse(deleteFirstCommand.equals(null));
+        assertNotEquals(null, deleteFirstCommand);
 
         // different person -> returns false
-        assertFalse(deleteFirstCommand.equals(deleteSecondCommand));
+        assertNotEquals(deleteFirstCommand, deleteSecondCommand);
     }
 
     /**
@@ -105,5 +140,23 @@ public class DeleteCommandTest {
         model.updateFilteredPersonList(p -> false);
 
         assertTrue(model.getFilteredPersonList().isEmpty());
+    }
+
+    /**
+     * Returns a {@code Repository} with a few AssignTask mappings for the TypicalTaskRepository and
+     * TypicalAddressBook used in this class.
+     */
+    private Repository<AssignTask> getPersonTaskRepository() {
+        AssignTask mapping1 = new AssignTask(ALICE.getId(), SEND_EMAIL_TO_CLIENT.getId());
+        AssignTask mapping2 = new AssignTask(ALICE.getId(), COMPLETE_SLIDES.getId());
+        AssignTask mapping3 = new AssignTask(CARL.getId(), STOCK_PANTRY.getId());
+        AssignTask mapping4 = new AssignTask(ALICE.getId(), CHECK_BALANCES.getId());
+
+        Repository<AssignTask> ptl = new Repository<>();
+        ptl.addItem(mapping1);
+        ptl.addItem(mapping2);
+        ptl.addItem(mapping3);
+        ptl.addItem(mapping4);
+        return ptl;
     }
 }
