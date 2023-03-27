@@ -48,6 +48,12 @@ public class MainWindow extends UiPart<Stage> {
     private MenuItem helpMenuItem;
 
     @FXML
+    private MenuItem darkMenuItem;
+
+    @FXML
+    private MenuItem lightMenuItem;
+
+    @FXML
     private MenuItem quickMenuItem;
 
     @FXML
@@ -98,6 +104,8 @@ public class MainWindow extends UiPart<Stage> {
 
     private void setAccelerators() {
         setAccelerator(helpMenuItem, KeyCombination.valueOf("F1"));
+        setAccelerator(lightMenuItem, KeyCombination.valueOf("F2"));
+        setAccelerator(darkMenuItem, KeyCombination.valueOf("F3"));
     }
 
     /**
@@ -128,10 +136,6 @@ public class MainWindow extends UiPart<Stage> {
                 event.consume();
             }
         });
-
-        // set event filter on menu to set custom cursor on hover
-        primaryStage.getScene().addEventFilter(MouseEvent.MOUSE_ENTERED, e
-            -> primaryStage.getScene().setCursor(customCursor));
     }
 
     /**
