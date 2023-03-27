@@ -208,6 +208,7 @@
 /* Label inside the personIndexes FlowPane */
 .person-index {
     -fx-background-color: white;
+    -fx-background-radius: 5px;
     -fx-padding: 3px 5px;
     -fx-text-fill: black;
     -fx-font-size: 12px;
