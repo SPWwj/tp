@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.URL?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.Scene?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.stage.Stage?>
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.stage.*?>
 
-<fx:root minHeight="600" minWidth="450" onCloseRequest="#handleExit" title="OfficeConnect"
-         type="javafx.stage.Stage" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root minHeight="650" minWidth="700" onCloseRequest="#handleExit" title="OfficeConnect" type="javafx.stage.Stage" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
   <icons>
     <Image url="@/images/officeconnect.png" />
   </icons>
@@ -42,8 +37,7 @@
           </Menu>
         </MenuBar>
 
-        <SplitPane id="splitPane" fx:id="splitPane" dividerPositions="0.4999999999999999"
-                   prefHeight="202.0" prefWidth="683.0" VBox.vgrow="ALWAYS">
+        <SplitPane id="splitPane" fx:id="splitPane" dividerPositions="0.4999999999999999" prefHeight="202.0" prefWidth="683.0" VBox.vgrow="ALWAYS">
           <VBox fx:id="personList" minWidth="340" prefWidth="340" SplitPane.resizableWithParent="false">
             <padding>
               <Insets bottom="10" left="10" right="10" top="10" />
@@ -60,20 +54,16 @@
 
         </SplitPane>
 
-        <StackPane fx:id="resultDisplayPlaceholder" maxHeight="100" minHeight="26.0" prefHeight="86.0" prefWidth="683.0"
-                   styleClass="pane-with-border" VBox.vgrow="NEVER" >
+        <StackPane fx:id="resultDisplayPlaceholder" maxHeight="200" minHeight="86.0" prefHeight="120.0" prefWidth="683.0" styleClass="pane-with-border" VBox.vgrow="NEVER">
+        </StackPane>
+
+        <StackPane fx:id="commandBoxPlaceholder" alignment="BOTTOM_CENTER" prefHeight="34.0" prefWidth="683.0" styleClass="pane-with-border" VBox.vgrow="NEVER">
           <padding>
             <Insets bottom="5" left="10" right="10" top="5" />
           </padding>
         </StackPane>
-
-        <StackPane fx:id="commandBoxPlaceholder" prefHeight="34.0" prefWidth="683.0" styleClass="pane-with-border" VBox.vgrow="NEVER">
-          <padding>
-            <Insets bottom="5" left="10" right="10" top="5" />
-          </padding>
-        </StackPane>
-
-        <StackPane fx:id="statusbarPlaceholder" VBox.vgrow="NEVER" />
+        
+        <StackPane fx:id="statusbarPlaceholder" VBox.vgrow="NEVER"/>
       </VBox>
     </Scene>
   </scene>
