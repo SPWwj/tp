@@ -149,6 +149,24 @@
     -fx-wrap-text: true;
 }
 
+/* Style the Label */
+.result-display {
+    -fx-text-fill: #000000; /* White text for better contrast against the grass background */
+    -fx-font-size: 14px;
+    -fx-padding: 5px 10px;
+}
+.result-display {
+    -fx-background-color: transparent;
+}
+
+.result-display .content {
+    -fx-background-color: transparent;
+}
+
+.result-display .viewport {
+    -fx-background-color: transparent;
+}
+
 /******************
  *   Status Bar   *
  ******************/

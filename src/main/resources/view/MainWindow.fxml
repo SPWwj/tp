@@ -25,8 +25,8 @@
           </Menu>
           <Menu mnemonicParsing="false" text="View">
             <items>
-              <MenuItem mnemonicParsing="false" onAction="#setLightTheme" text="Light Mode" />
-              <MenuItem mnemonicParsing="false" onAction="#setDarkTheme" text="Dark Mode" />
+              <MenuItem fx:id="lightMenuItem" mnemonicParsing="false" onAction="#setLightTheme" text="Light Mode" />
+              <MenuItem fx:id="darkMenuItem" mnemonicParsing="false" onAction="#setDarkTheme" text="Dark Mode" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
