@@ -18,6 +18,9 @@
 <!--    <stylesheets>-->
 <!--        <URL value="@../css/TaskCardView.css" />-->
 <!--    </stylesheets>-->
+<!--    <stylesheets>-->
+<!--        <URL value="@../css/TaskCardView.css" />-->
+<!--    </stylesheets>-->
     <GridPane HBox.hgrow="ALWAYS">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10" prefWidth="150" />
@@ -38,8 +41,11 @@
             <Label fx:id="content" styleClass="cell_small_label" text="\$content" />
             <Label fx:id="status" styleClass="cell_small_label" text="\$status" />
             <Label fx:id="createDate" styleClass="cell_small_label" text="\$createDate" />
+                <Label fx:id="title" styleClass="cell_big_label" text="\$first" wrapText="true" />
+               <Label fx:id="status" styleClass="cell_small_label" text="\$status" />
+            </HBox>
+            <Label fx:id="content" styleClass="cell_small_label" text="\$content" wrapText="true" />
             <FlowPane fx:id="personIndexes" />
-
         </VBox>
       <rowConstraints>
          <RowConstraints />
