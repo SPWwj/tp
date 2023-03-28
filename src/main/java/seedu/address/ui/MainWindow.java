@@ -3,13 +3,14 @@ package seedu.address.ui;
 import java.util.logging.Logger;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputControl;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -46,6 +47,12 @@ public class MainWindow extends UiPart<Stage> {
 
     @FXML
     private MenuItem helpMenuItem;
+
+    @FXML
+    private MenuItem darkMenuItem;
+
+    @FXML
+    private MenuItem lightMenuItem;
 
     @FXML
     private MenuItem quickMenuItem;
@@ -98,6 +105,8 @@ public class MainWindow extends UiPart<Stage> {
 
     private void setAccelerators() {
         setAccelerator(helpMenuItem, KeyCombination.valueOf("F1"));
+        setAccelerator(lightMenuItem, KeyCombination.valueOf("F2"));
+        setAccelerator(darkMenuItem, KeyCombination.valueOf("F3"));
     }
 
     /**
@@ -129,9 +138,21 @@ public class MainWindow extends UiPart<Stage> {
             }
         });
 
-        // set event filter on menu to set custom cursor on hover
-        primaryStage.getScene().addEventFilter(MouseEvent.MOUSE_ENTERED, e
-            -> primaryStage.getScene().setCursor(customCursor));
+        EventHandler<KeyEvent> keyEventHandler = new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.F2) {
+                    // Perform action for F1
+                    setLightTheme();
+                    event.consume();
+                } else if (event.getCode() == KeyCode.F3) {
+                    // Perform action for F2
+                    setDarkTheme();
+                    event.consume();
+                }
+            }
+        };
+        getRoot().addEventFilter(KeyEvent.KEY_PRESSED, keyEventHandler);
     }
 
     /**
